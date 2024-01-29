@@ -1,10 +1,11 @@
+import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
-import { createAppContainer, createSwitchNavigator } from 'react-navigation'
+import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-//Screens
+// Screens
 import AccountScreen from './src/screens/AccountScreen'
 import SignInScreen from './src/screens/SigninScreen'
 import SignUpScreen from './src/screens/SignupScreen'
@@ -12,22 +13,46 @@ import TrackCreateScreen from './src/screens/TrackCreateScreen'
 import TrackDetailScreen from './src/screens/TrackDetailScreen'
 import TrackListScreen from './src/screens/TrackListScreen'
 
-const stack = createStackNavigator()
+const Stack = createStackNavigator()
+const Tab = createBottomTabNavigator()
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  )
-}
+const AuthStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="SignIn"
+      component={SignInScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="SignUp"
+      component={SignUpScreen}
+      options={{ headerShown: false }}
+    />
+  </Stack.Navigator>
+)
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
+const TrackListStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="TrackListMain" component={TrackListScreen} />
+    <Stack.Screen name="TrackDetail" component={TrackDetailScreen} />
+  </Stack.Navigator>
+)
+
+const MainTabs = () => (
+  <Tab.Navigator>
+    <Tab.Screen name="TrackListTab" component={TrackListStack} />
+    <Tab.Screen name="TrackCreate" component={TrackCreateScreen} />
+    <Tab.Screen name="Account" component={AccountScreen} />
+  </Tab.Navigator>
+)
+
+const AppNavigator = () => (
+  <NavigationContainer>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="AuthFlow" component={AuthStack} />
+      <Stack.Screen name="MainFlow" component={MainTabs} />
+    </Stack.Navigator>
+  </NavigationContainer>
+)
+
+export default AppNavigator
